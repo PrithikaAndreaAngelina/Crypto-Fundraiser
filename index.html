@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Fundraiser</title>
+    <link rel="shortcut icon" href="android-chrome-192x192.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js" integrity="sha512-Ws+qbaGHSFw2Zc1e7XRpvW+kySrhmPLFYTyQ95mxAkss0sshj6ObdNP3HDWcwTs8zBJ60KpynKZywk0R8tG1GA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+    <section class="navbar">
+        <header>
+          <h2 class="logo">Crypto Fundraiser</h2>
+        </header>
+      
+        <div class="overlay"></div>
+        <div class="hero">
+          <h2>The New Level  </h2> 
+          <h3>Of Funding</h3>
+
+
+
+          <p>An enhancement of existing crowd funding platform to promote security by voting using blockchain technology which is a decentralized 
+            distributed ledger system that accesses, verifies, and transmits network data through distributed nodes</p>
+          <button id='loginButton' onclick="" class="mx-auto rounded-md p-2 bg-blue-500 text-white">
+            Connect MetaMask
+          </button>
+          <p id='userWallet' class='text-lg text-gray-600 my-2'></p>
+        </div>
+      
+        <script>
+          window.userWalletAddress = null
+          const loginButton = document.getElementById('loginButton')
+          const userWallet = document.getElementById('userWallet')
+      
+          function toggleButton() {
+            if (!window.ethereum) {
+              loginButton.innerText = 'MetaMask is not installed'
+              loginButton.classList.remove('bg-blue-500', 'text-white')
+              loginButton.classList.add('bg-blue-500', 'text-gray-100', 'cursor-not-allowed')
+              return false
+            }
+      
+            loginButton.addEventListener('click', loginWithMetaMask)
+          }
+      
+          async function loginWithMetaMask() {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+              .catch((e) => {
+                console.error(e.message)
+                return
+              })
+            if (!accounts) { return }
+      
+            window.userWalletAddress = accounts[0]
+            userWallet.innerText = window.userWalletAddress
+            loginButton.innerText = 'Sign out of MetaMask'
+      
+            loginButton.removeEventListener('click', loginWithMetaMask)
+            setTimeout(() => {
+              loginButton.addEventListener('click', signOutOfMetaMask)
+            }, 200)
+          }
+      
+          function signOutOfMetaMask() {
+            window.userWalletAddress = null
+            userWallet.innerText = ''
+            loginButton.innerText = 'Sign in with MetaMask'
+      
+            loginButton.removeEventListener('click', signOutOfMetaMask)
+            setTimeout(() => {
+              loginButton.addEventListener('click', loginWithMetaMask)
+            }, 200)
+          }
+      
+          window.addEventListener('DOMContentLoaded', () => {
+            toggleButton()
+          });
+        </script>
+        </section>
+</body>
+</html>
